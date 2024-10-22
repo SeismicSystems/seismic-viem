@@ -1,6 +1,7 @@
 import type { Address } from 'abitype'
 
 import type { Account } from '../../accounts/types.js'
+import type { Hex } from '../../types/misc.js'
 import {
   type ParseAccountErrorType,
   parseAccount,
@@ -68,7 +69,7 @@ export type SendSeismicTransactionRequest<
   _derivedChain extends Chain | undefined = DeriveChain<chain, chainOverride>,
 > = UnionOmit<FormattedTransactionRequest<_derivedChain>, 'from'> &
   GetTransactionRequestKzgParameter & {
-    seismicInput: `0x${string}`
+    seismicInput: Hex,
   }
 
 export type SendSeismicTransactionParameters<
@@ -102,7 +103,6 @@ export type SendSeismicTransactionErrorType =
     >
   | ErrorType
 
-
 export async function sendSeismicTransaction<
   chain extends Chain | undefined,
   account extends Account | undefined,
@@ -110,7 +110,12 @@ export async function sendSeismicTransaction<
   chainOverride extends Chain | undefined = undefined,
 >(
   client: Client<Transport, chain, account>,
-  parameters: SendSeismicTransactionParameters<chain, account, chainOverride, request>,
+  parameters: SendSeismicTransactionParameters<
+    chain,
+    account,
+    chainOverride,
+    request
+  >,
 ): Promise<SendSeismicTransactionReturnType> {
   const {
     account: account_ = client.account,
@@ -139,20 +144,16 @@ export async function sendSeismicTransaction<
   try {
     assertRequest(parameters as AssertRequestParameters)
 
-    if (!seismicInput || typeof seismicInput !== 'string' || !seismicInput.startsWith('0x')) {
+    if (
+      !seismicInput ||
+      typeof seismicInput !== 'string' ||
+      !seismicInput.startsWith('0x')
+    ) {
       throw new Error('seismicInput must be a non-empty hex string')
     }
 
     const to = await (async () => {
       if (parameters.to) return parameters.to
-      if (authorizationList && authorizationList.length > 0)
-        return await recoverAuthorizationAddress({
-          authorization: authorizationList[0],
-        }).catch(() => {
-          throw new BaseError(
-            'to is required. Could not infer from authorizationList.',
-          )
-        })
       return undefined
     })()
 
@@ -265,9 +266,7 @@ export async function sendSeismicTransaction<
 
     if (account?.type === 'smart')
       throw new AccountTypeNotSupportedError({
-        metaMessages: [
-          'Consider using the sendUserOperation Action instead.',
-        ],
+        metaMessages: ['Consider using the sendUserOperation Action instead.'],
         docsPath: '/docs/actions/bundler/sendUserOperation',
         type: 'smart',
       })

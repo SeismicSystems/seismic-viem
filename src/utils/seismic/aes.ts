@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto'
-import type { Hex } from '../types/misc.js'
+import type { Hex } from '../../types/misc.js'
 
 export class AesGcmCrypto {
   private readonly ALGORITHM = 'aes-256-gcm'

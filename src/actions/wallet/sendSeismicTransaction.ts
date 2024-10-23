@@ -60,7 +60,7 @@ import {
   sendRawTransaction,
 } from './sendRawTransaction.js'
 
-const supportsSeismicNamespace = new LruMap<boolean>(128)
+const supportsWalletNamespace = new LruMap<boolean>(128)
 
 export type SendSeismicTransactionRequest<
   chain extends Chain | undefined = Chain | undefined,
@@ -189,8 +189,8 @@ export async function sendSeismicTransaction<
         seismicInput,
       } as TransactionRequest)
 
-      const method = supportsSeismicNamespace.get(client.uid)
-        ? 'seismic_sendTransaction'
+      const method = supportsWalletNamespace.get(client.uid)
+        ? 'wallet_sendTransaction'
         : 'eth_sendTransaction'
 
       try {
@@ -212,13 +212,13 @@ export async function sendSeismicTransaction<
           return await client
             .request(
               {
-                method: 'seismic_sendTransaction',
+                method: 'wallet_sendTransaction',
                 params: [request],
               },
               { retryCount: 0 },
             )
             .then((hash) => {
-              supportsSeismicNamespace.set(client.uid, true)
+              supportsWalletNamespace.set(client.uid, true)
               return hash
             })
         throw error

@@ -49,6 +49,12 @@ import {
   sendTransaction,
 } from '../../actions/wallet/sendTransaction.js'
 import {
+  type SendSeismicTransactionParameters,
+  type SendSeismicTransactionRequest,
+  type SendSeismicTransactionReturnType,
+  sendSeismicTransaction,
+} from '../../actions/wallet/sendSeismicTransaction.js'
+import {
   type SignMessageParameters,
   type SignMessageReturnType,
   signMessage,
@@ -381,6 +387,19 @@ export type WalletActions<
   >(
     args: SendTransactionParameters<chain, account, chainOverride, request>,
   ) => Promise<SendTransactionReturnType>
+
+  sendSeismicTransaction: <
+    const request extends SendSeismicTransactionRequest<chain, chainOverride>,
+    chainOverride extends Chain | undefined = undefined,
+  >(
+    args: SendSeismicTransactionParameters<
+      chain,
+      account,
+      chainOverride,
+      request
+    >,
+  ) => Promise<SendSeismicTransactionReturnType>
+
   /**
    * Calculates an Ethereum-specific signature in [EIP-191 format](https://eips.ethereum.org/EIPS/eip-191): `keccak256("\x19Ethereum Signed Message:\n" + len(message) + message))`.
    *
@@ -712,6 +731,7 @@ export function walletActions<
     requestPermissions: (args) => requestPermissions(client, args),
     sendRawTransaction: (args) => sendRawTransaction(client, args),
     sendTransaction: (args) => sendTransaction(client, args),
+    sendSeismicTransaction: (args) => sendSeismicTransaction(client, args),
     signMessage: (args) => signMessage(client, args),
     signTransaction: (args) => signTransaction(client, args),
     signTypedData: (args) => signTypedData(client, args),

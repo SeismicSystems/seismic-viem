@@ -1,7 +1,5 @@
-import { promises as fs } from 'node:fs'
 import { killProcess, runProcess } from './process.js'
 import type { ServerProcess } from './server.js'
-import { sleep } from 'bun'
 
 type SeismicOptions = {
   port?: number
@@ -21,7 +19,7 @@ export const runSanvil = async (
     args: ['--port', port.toString(), ...silentArg],
   })
 
-  await sleep(waitMs)
+  await new Promise((resolve) => setTimeout(resolve, waitMs))
 
   // Check if process is running by verifying the URL is accessible, etc.
   try {

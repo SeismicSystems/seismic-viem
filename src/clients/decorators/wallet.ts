@@ -43,17 +43,17 @@ import {
   sendRawTransaction,
 } from '../../actions/wallet/sendRawTransaction.js'
 import {
-  type SendTransactionParameters,
-  type SendTransactionRequest,
-  type SendTransactionReturnType,
-  sendTransaction,
-} from '../../actions/wallet/sendTransaction.js'
-import {
   type SendSeismicTransactionParameters,
   type SendSeismicTransactionRequest,
   type SendSeismicTransactionReturnType,
   sendSeismicTransaction,
 } from '../../actions/wallet/sendSeismicTransaction.js'
+import {
+  type SendTransactionParameters,
+  type SendTransactionRequest,
+  type SendTransactionReturnType,
+  sendTransaction,
+} from '../../actions/wallet/sendTransaction.js'
 import {
   type SignMessageParameters,
   type SignMessageReturnType,

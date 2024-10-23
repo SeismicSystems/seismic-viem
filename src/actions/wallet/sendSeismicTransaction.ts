@@ -1,7 +1,6 @@
 import type { Address } from 'abitype'
 
 import type { Account } from '../../accounts/types.js'
-import type { Hex } from '../../types/misc.js'
 import {
   type ParseAccountErrorType,
   parseAccount,
@@ -15,7 +14,7 @@ import {
   AccountTypeNotSupportedError,
   type AccountTypeNotSupportedErrorType,
 } from '../../errors/account.js'
-import { BaseError } from '../../errors/base.js'
+import type { BaseError } from '../../errors/base.js'
 import type { ErrorType } from '../../errors/utils.js'
 import {
   type RecoverAuthorizationAddressErrorType,
@@ -25,6 +24,7 @@ import type { GetAccountParameter } from '../../types/account.js'
 import type { Chain, DeriveChain } from '../../types/chain.js'
 import type { GetChainParameter } from '../../types/chain.js'
 import type { GetTransactionRequestKzgParameter } from '../../types/kzg.js'
+import type { Hex } from '../../types/misc.js'
 import type { Hash } from '../../types/misc.js'
 import type { TransactionRequest } from '../../types/transaction.js'
 import type { UnionOmit } from '../../types/utils.js'
@@ -69,7 +69,7 @@ export type SendSeismicTransactionRequest<
   _derivedChain extends Chain | undefined = DeriveChain<chain, chainOverride>,
 > = UnionOmit<FormattedTransactionRequest<_derivedChain>, 'from'> &
   GetTransactionRequestKzgParameter & {
-    seismicInput: Hex,
+    seismicInput: Hex
   }
 
 export type SendSeismicTransactionParameters<

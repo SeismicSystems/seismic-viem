@@ -1,5 +1,8 @@
 import { getContractAddress } from 'viem'
 
+/**
+ * Gets the deployed address of a contract
+ */
 export const getDeployedAddress = async (
   publicClient: any,
   address: `0x${string}`,

@@ -16,10 +16,7 @@ import {
 } from '../../errors/account.js'
 import type { BaseError } from '../../errors/base.js'
 import type { ErrorType } from '../../errors/utils.js'
-import {
-  type RecoverAuthorizationAddressErrorType,
-  recoverAuthorizationAddress,
-} from '../../experimental/eip7702/utils/recoverAuthorizationAddress.js'
+import type { RecoverAuthorizationAddressErrorType } from '../../experimental/eip7702/utils/recoverAuthorizationAddress.js'
 import type { GetAccountParameter } from '../../types/account.js'
 import type { Chain, DeriveChain } from '../../types/chain.js'
 import type { GetChainParameter } from '../../types/chain.js'
@@ -50,15 +47,8 @@ import {
   assertRequest,
 } from '../../utils/transaction/assertRequest.js'
 import { type GetChainIdErrorType, getChainId } from '../public/getChainId.js'
-import {
-  type PrepareTransactionRequestErrorType,
-  defaultParameters,
-  prepareTransactionRequest,
-} from './prepareTransactionRequest.js'
-import {
-  type SendRawTransactionErrorType,
-  sendRawTransaction,
-} from './sendRawTransaction.js'
+import type { PrepareTransactionRequestErrorType } from './prepareTransactionRequest.js'
+import type { SendRawTransactionErrorType } from './sendRawTransaction.js'
 
 const supportsWalletNamespace = new LruMap<boolean>(128)
 
@@ -103,6 +93,11 @@ export type SendSeismicTransactionErrorType =
     >
   | ErrorType
 
+/**
+ * Sends a Seismic transaction,
+ * taking in `seismicInput` as the (ciphered) input
+ * to the node.
+ */
 export async function sendSeismicTransaction<
   chain extends Chain | undefined,
   account extends Account | undefined,
@@ -132,7 +127,7 @@ export async function sendSeismicTransaction<
     nonce,
     value,
     seismicInput,
-    ..._rest
+    ...rest
   } = parameters
   console.info('parameters: ', parameters)
 
@@ -182,36 +177,24 @@ export async function sendSeismicTransaction<
       const chainFormat = client.chain?.formatters?.transactionRequest?.format
       const _format = chainFormat || formatTransactionRequest
 
-      // console.info(
-      //   'request before format: ',
-      //   format({
-      //     ...extract(rest, { format: chainFormat }),
-      //     accessList,
-      //     authorizationList,
-      //     blobs,
-      //     chainId,
-      //     data,
-      //     from: account?.address,
-      //     gas,
-      //     gasPrice,
-      //     maxFeePerBlobGas,
-      //     maxFeePerGas,
-      //     maxPriorityFeePerGas,
-      //     nonce,
-      //     to,
-      //     value,
-      //     seismicInput,
-      //   } as TransactionRequest),
-      // )
-
-      const request = {
+      const request = _format({
+        ...extract(rest, { format: chainFormat }),
+        accessList,
+        authorizationList,
+        blobs,
+        chainId,
+        data,
         from: account?.address,
-        to,
         gas,
         gasPrice,
+        maxFeePerBlobGas,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
         nonce,
+        to,
+        value,
         seismicInput,
-      } as TransactionRequest
+      } as TransactionRequest)
 
       const method = 'eth_sendTransaction'
       console.info('request: ', request)
@@ -220,7 +203,6 @@ export async function sendSeismicTransaction<
         return await client.request(
           {
             method,
-            // @ts-ignore
             params: [request],
           },
           { retryCount: 0 },
@@ -249,46 +231,6 @@ export async function sendSeismicTransaction<
         throw error
       }
     }
-
-    // if (account?.type === 'local') {
-    //   console.info('local account: ', account)
-    //   const request = await getAction(
-    //     client,
-    //     prepareTransactionRequest,
-    //     'prepareTransactionRequest',
-    //   )({
-    //     account,
-    //     accessList,
-    //     authorizationList,
-    //     blobs,
-    //     chain,
-    //     data,
-    //     gas,
-    //     gasPrice,
-    //     maxFeePerBlobGas,
-    //     maxFeePerGas,
-    //     maxPriorityFeePerGas,
-    //     nonce,
-    //     nonceManager: account.nonceManager,
-    //     parameters: [...defaultParameters, 'sidecars', 'seismicInput'],
-    //     value,
-    //     ...rest,
-    //     to,
-    //     seismicInput,
-    //   } as any)
-
-    //   const serializer = chain?.serializers?.transaction
-    //   const serializedTransaction = (await account.signTransaction(request, {
-    //     serializer,
-    //   })) as Hash
-    //   return await getAction(
-    //     client,
-    //     sendRawTransaction,
-    //     'sendRawTransaction',
-    //   )({
-    //     serializedTransaction,
-    //   })
-    // }
 
     if (account?.type === 'smart')
       throw new AccountTypeNotSupportedError({

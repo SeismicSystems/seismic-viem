@@ -1,5 +1,5 @@
-import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto'
-import { hexToRlp, type Hex } from 'viem'
+import { createCipheriv, createDecipheriv } from 'node:crypto'
+import { type Hex, hexToRlp } from 'viem'
 
 export class AesGcmCrypto {
   private readonly ALGORITHM = 'aes-256-gcm'

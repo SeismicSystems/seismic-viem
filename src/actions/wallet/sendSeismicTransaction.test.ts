@@ -12,11 +12,30 @@ import { bytecode } from '../../utils/seismic/bytecode.js'
 import { getDeployedAddress } from '../../utils/seismic/misc.js'
 import { killProcess } from '../../utils/seismic/process.js'
 import { runSanvil } from '../../utils/seismic/runSanvil.js'
-import { hexToRlp } from '../../utils/encoding/toRlp.js'
 
-const contractBytecodeFormatted: `0x${string}` = `0x${bytecode.object.replace(/^0x/, '')}`
+/* Test Contract:
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
 
-// const _TEST_ADDRESS = '0x5615deb798bb3e4dfa0139dfa1b3d433cc23b72f'
+contract Counter {
+    uint256 public number;
+
+    function setNumber(uint256 newNumber) public {
+        number = newNumber;
+    }
+
+    function increment() public {
+        number++;
+    }
+
+    function getNumber() public view returns (uint256) {
+        return number;
+    }
+}
+*/
+
+const testContractBytecodeFormatted: `0x${string}` = `0x${bytecode.object.replace(/^0x/, '')}`
+
 const TEST_PRIVATE_KEY =
   '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
 const TEST_NUMBER = BigInt(10)
@@ -48,11 +67,10 @@ describe('Seismic Transaction', async () => {
   test('node detects and parses seismic transaction', async () => {
     const SET_NUMBER_SELECTOR = '3fb5c1cb'
     const INCREMENT_SELECTOR = 'd09de08a'
-    // const GET_NUMBER_SELECTOR = 'f2c9ecd8'
 
     await anvilWalletClient.deployContract({
       abi: contractABI,
-      bytecode: contractBytecodeFormatted,
+      bytecode: testContractBytecodeFormatted,
     })
 
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -64,15 +82,7 @@ describe('Seismic Transaction', async () => {
 
     const set_input_raw: Hex =
       `0x${SET_NUMBER_SELECTOR}${TEST_NUMBER.toString(16).padStart(64, '0')}` as Hex
-    console.info('set_input_raw: ', set_input_raw)
     const set_input_encrypted = aesCipher.encrypt(set_input_raw, 1n)
-
-    console.info(
-      'latest nonce: ',
-      await anvilClient.getTransactionCount({
-        address: anvilWalletClient.account.address,
-      }),
-    )
 
     await anvilWalletClient.sendSeismicTransaction({
       to: deployedContractAddress,
@@ -82,22 +92,8 @@ describe('Seismic Transaction', async () => {
       nonce: 1,
     })
 
-    console.info('set_input_encrypted: ', set_input_encrypted)
-    console.info(
-      'set_input_decrypted: ',
-      aesCipher.decrypt(set_input_encrypted.ciphertext, 1n),
-    )
-
     const increment_input_raw = `0x${INCREMENT_SELECTOR}`
-    console.info('increment_input_raw: ', increment_input_raw)
     const increment_input_encrypted = aesCipher.encrypt(increment_input_raw, 2n)
-
-    console.info(
-      'latest nonce: ',
-      await anvilClient.getTransactionCount({
-        address: anvilWalletClient.account.address,
-      }),
-    )
 
     await anvilWalletClient.sendSeismicTransaction({
       to: deployedContractAddress,
@@ -107,19 +103,11 @@ describe('Seismic Transaction', async () => {
       nonce: 2,
     })
 
-    console.info('increment_input_encrypted: ', increment_input_encrypted)
-    console.info(
-      'increment_input_decrypted: ',
-      aesCipher.decrypt(increment_input_encrypted.ciphertext, 2n),
-    )
-
     const getValue = await anvilClient.readContract({
       address: deployedContractAddress,
       abi: contractABI,
       functionName: 'getNumber',
     })
-
-    console.info('getValue: ', getValue)
 
     const expectedValue = TEST_NUMBER + BigInt(1)
     expect(getValue).toBe(expectedValue)

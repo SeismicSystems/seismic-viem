@@ -8,6 +8,9 @@ type RunProcessOptions = {
   cwd?: string
 }
 
+/**
+ * Runs a process
+ */
 export const runProcess = async (
   command: string,
   options: RunProcessOptions = {},
@@ -23,6 +26,9 @@ export const runProcess = async (
   return process
 }
 
+/**
+ * Kills a process
+ */
 export const killProcess = async (process: ChildProcess) => {
   const description = process.spawnargs.join(' ')
   if (!process.pid) {

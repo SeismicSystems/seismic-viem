@@ -70,6 +70,8 @@ export function formatTransactionRequest(
     rpcRequest.type = rpcTransactionType[request.type]
   if (typeof request.value !== 'undefined')
     rpcRequest.value = numberToHex(request.value)
+  if (typeof request.seismicInput !== 'undefined')
+    rpcRequest.seismicInput = request.seismicInput
 
   return rpcRequest
 }

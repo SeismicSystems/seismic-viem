@@ -1,3 +1,6 @@
+/**
+ * The ABI of the test contract
+ */
 export const contractABI = [
   {
     type: 'function',

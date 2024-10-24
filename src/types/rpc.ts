@@ -24,6 +24,7 @@ import type {
   TransactionRequestEIP4844,
   TransactionRequestEIP7702,
   TransactionRequestLegacy,
+  TransactionRequestSeismic,
 } from './transaction.js'
 import type { Omit, OneOf, PartialBy } from './utils.js'
 
@@ -61,6 +62,7 @@ export type RpcTransactionRequest = OneOf<
   | TransactionRequestEIP2930<Quantity, Index, '0x1'>
   | TransactionRequestEIP1559<Quantity, Index, '0x2'>
   | TransactionRequestEIP4844<Quantity, Index, '0x3'>
+  | TransactionRequestSeismic<Quantity, Index, '0x5'>
   | (Omit<
       TransactionRequestEIP7702<Quantity, Index, '0x4'>,
       'authorizationList'

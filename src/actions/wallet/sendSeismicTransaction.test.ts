@@ -1,17 +1,18 @@
 import { afterAll, describe, expect, test } from 'bun:test'
-import type { Hex } from '../../types/misc.js'
 import { privateKeyToAccount } from '../../accounts/privateKeyToAccount.js'
 import { foundry } from '../../chains/index.js'
 import { createPublicClient } from '../../clients/createPublicClient.js'
 import { createWalletClient } from '../../clients/createWalletClient.js'
 import { http } from '../../clients/transports/http.js'
+import type { Hex } from '../../types/misc.js'
+import { parseGwei } from '../../utils/index.js'
 import { contractABI } from '../../utils/seismic/abi.js'
 import { AesGcmCrypto } from '../../utils/seismic/aes.js'
 import { bytecode } from '../../utils/seismic/bytecode.js'
 import { getDeployedAddress } from '../../utils/seismic/misc.js'
 import { killProcess } from '../../utils/seismic/process.js'
 import { runSanvil } from '../../utils/seismic/runSanvil.js'
-import { parseGwei } from '../../utils/index.js'
+import { hexToRlp } from '../../utils/encoding/toRlp.js'
 
 const contractBytecodeFormatted: `0x${string}` = `0x${bytecode.object.replace(/^0x/, '')}`
 
@@ -64,10 +65,7 @@ describe('Seismic Transaction', async () => {
     const set_input_raw: Hex =
       `0x${SET_NUMBER_SELECTOR}${TEST_NUMBER.toString(16).padStart(64, '0')}` as Hex
     console.info('set_input_raw: ', set_input_raw)
-    const set_input_encrypted = aesCipher.encrypt(
-      set_input_raw,
-      '0x000000000000000000000001',
-    )
+    const set_input_encrypted = aesCipher.encrypt(set_input_raw, 1n)
 
     console.info(
       'latest nonce: ',
@@ -87,19 +85,12 @@ describe('Seismic Transaction', async () => {
     console.info('set_input_encrypted: ', set_input_encrypted)
     console.info(
       'set_input_decrypted: ',
-      aesCipher.decrypt(
-        Buffer.from(set_input_encrypted.ciphertext.slice(2), 'hex'),
-        Buffer.from('000000000000000000000001', 'hex'),
-        Buffer.from(set_input_encrypted.tag.slice(2), 'hex'),
-      ),
+      aesCipher.decrypt(set_input_encrypted.ciphertext, 1n),
     )
 
     const increment_input_raw = `0x${INCREMENT_SELECTOR}`
     console.info('increment_input_raw: ', increment_input_raw)
-    const increment_input_encrypted = aesCipher.encrypt(
-      increment_input_raw,
-      '0x000000000000000000000002',
-    )
+    const increment_input_encrypted = aesCipher.encrypt(increment_input_raw, 2n)
 
     console.info(
       'latest nonce: ',
@@ -119,11 +110,7 @@ describe('Seismic Transaction', async () => {
     console.info('increment_input_encrypted: ', increment_input_encrypted)
     console.info(
       'increment_input_decrypted: ',
-      aesCipher.decrypt(
-        Buffer.from(increment_input_encrypted.ciphertext.slice(2), 'hex'),
-        Buffer.from('000000000000000000000002', 'hex'),
-        Buffer.from(increment_input_encrypted.tag.slice(2), 'hex'),
-      ),
+      aesCipher.decrypt(increment_input_encrypted.ciphertext, 2n),
     )
 
     const getValue = await anvilClient.readContract({

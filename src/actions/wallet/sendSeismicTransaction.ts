@@ -132,8 +132,9 @@ export async function sendSeismicTransaction<
     nonce,
     value,
     seismicInput,
-    ...rest
+    ..._rest
   } = parameters
+  console.info('parameters: ', parameters)
 
   if (typeof account_ === 'undefined')
     throw new AccountNotFoundError({
@@ -152,12 +153,21 @@ export async function sendSeismicTransaction<
       throw new Error('seismicInput must be a non-empty hex string')
     }
 
+    console.info('seismicInput: ', seismicInput)
+
     const to = await (async () => {
       if (parameters.to) return parameters.to
       return undefined
     })()
 
-    if (account?.type === 'json-rpc' || account === null) {
+    console.info('to: ', to)
+
+    if (
+      account?.type === 'json-rpc' ||
+      account === null ||
+      account?.type === 'local'
+    ) {
+      console.info('chain: ', chain)
       let chainId: number | undefined
       if (chain !== null) {
         chainId = await getAction(client, getChainId, 'getChainId')({})
@@ -167,36 +177,50 @@ export async function sendSeismicTransaction<
         })
       }
 
-      const chainFormat = client.chain?.formatters?.transactionRequest?.format
-      const format = chainFormat || formatTransactionRequest
+      console.info('chainId: ', chainId)
 
-      const request = format({
-        ...extract(rest, { format: chainFormat }),
-        accessList,
-        authorizationList,
-        blobs,
-        chainId,
-        data,
+      const chainFormat = client.chain?.formatters?.transactionRequest?.format
+      const _format = chainFormat || formatTransactionRequest
+
+      // console.info(
+      //   'request before format: ',
+      //   format({
+      //     ...extract(rest, { format: chainFormat }),
+      //     accessList,
+      //     authorizationList,
+      //     blobs,
+      //     chainId,
+      //     data,
+      //     from: account?.address,
+      //     gas,
+      //     gasPrice,
+      //     maxFeePerBlobGas,
+      //     maxFeePerGas,
+      //     maxPriorityFeePerGas,
+      //     nonce,
+      //     to,
+      //     value,
+      //     seismicInput,
+      //   } as TransactionRequest),
+      // )
+
+      const request = {
         from: account?.address,
+        to,
         gas,
         gasPrice,
-        maxFeePerBlobGas,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
         nonce,
-        to,
-        value,
         seismicInput,
-      } as TransactionRequest)
+      } as TransactionRequest
 
-      const method = supportsWalletNamespace.get(client.uid)
-        ? 'wallet_sendTransaction'
-        : 'eth_sendTransaction'
+      const method = 'eth_sendTransaction'
+      console.info('request: ', request)
 
       try {
         return await client.request(
           {
             method,
+            // @ts-ignore
             params: [request],
           },
           { retryCount: 0 },
@@ -213,56 +237,58 @@ export async function sendSeismicTransaction<
             .request(
               {
                 method: 'wallet_sendTransaction',
+                // @ts-ignore
                 params: [request],
               },
               { retryCount: 0 },
             )
             .then((hash) => {
               supportsWalletNamespace.set(client.uid, true)
-              return hash
+              return hash as Hash
             })
         throw error
       }
     }
 
-    if (account?.type === 'local') {
-      const request = await getAction(
-        client,
-        prepareTransactionRequest,
-        'prepareTransactionRequest',
-      )({
-        account,
-        accessList,
-        authorizationList,
-        blobs,
-        chain,
-        data,
-        gas,
-        gasPrice,
-        maxFeePerBlobGas,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-        nonce,
-        nonceManager: account.nonceManager,
-        parameters: [...defaultParameters, 'sidecars', 'seismicInput'],
-        value,
-        ...rest,
-        to,
-        seismicInput,
-      } as any)
+    // if (account?.type === 'local') {
+    //   console.info('local account: ', account)
+    //   const request = await getAction(
+    //     client,
+    //     prepareTransactionRequest,
+    //     'prepareTransactionRequest',
+    //   )({
+    //     account,
+    //     accessList,
+    //     authorizationList,
+    //     blobs,
+    //     chain,
+    //     data,
+    //     gas,
+    //     gasPrice,
+    //     maxFeePerBlobGas,
+    //     maxFeePerGas,
+    //     maxPriorityFeePerGas,
+    //     nonce,
+    //     nonceManager: account.nonceManager,
+    //     parameters: [...defaultParameters, 'sidecars', 'seismicInput'],
+    //     value,
+    //     ...rest,
+    //     to,
+    //     seismicInput,
+    //   } as any)
 
-      const serializer = chain?.serializers?.transaction
-      const serializedTransaction = (await account.signTransaction(request, {
-        serializer,
-      })) as Hash
-      return await getAction(
-        client,
-        sendRawTransaction,
-        'sendRawTransaction',
-      )({
-        serializedTransaction,
-      })
-    }
+    //   const serializer = chain?.serializers?.transaction
+    //   const serializedTransaction = (await account.signTransaction(request, {
+    //     serializer,
+    //   })) as Hash
+    //   return await getAction(
+    //     client,
+    //     sendRawTransaction,
+    //     'sendRawTransaction',
+    //   )({
+    //     serializedTransaction,
+    //   })
+    // }
 
     if (account?.type === 'smart')
       throw new AccountTypeNotSupportedError({

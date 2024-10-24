@@ -12,11 +12,10 @@ export type SeismicProcess = ServerProcess & { url: string }
 export const runSanvil = async (
   options: SeismicOptions = {},
 ): Promise<SeismicProcess> => {
-  const { port = 8545, silent = true, waitMs = 2_000 } = options
-  const silentArg = silent ? ['--silent'] : []
+  const { port = 8545, waitMs = 2_000 } = options
 
   const process = await runProcess('sanvil', {
-    args: ['--port', port.toString(), ...silentArg],
+    args: ['--port', port.toString()],
   })
 
   await new Promise((resolve) => setTimeout(resolve, waitMs))

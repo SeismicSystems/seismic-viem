@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, test } from 'bun:test'
-import type { Hex } from '~viem/types/misc.js'
+import type { Hex } from '../../types/misc.js'
 import { privateKeyToAccount } from '../../accounts/privateKeyToAccount.js'
 import { foundry } from '../../chains/index.js'
 import { createPublicClient } from '../../clients/createPublicClient.js'
@@ -11,6 +11,7 @@ import { bytecode } from '../../utils/seismic/bytecode.js'
 import { getDeployedAddress } from '../../utils/seismic/misc.js'
 import { killProcess } from '../../utils/seismic/process.js'
 import { runSanvil } from '../../utils/seismic/runSanvil.js'
+import { parseGwei } from '../../utils/index.js'
 
 const contractBytecodeFormatted: `0x${string}` = `0x${bytecode.object.replace(/^0x/, '')}`
 
@@ -79,6 +80,7 @@ describe('Seismic Transaction', async () => {
       to: deployedContractAddress,
       seismicInput: set_input_encrypted.ciphertext,
       gas: 210000n,
+      gasPrice: parseGwei('20'),
       nonce: 1,
     })
 
@@ -110,6 +112,7 @@ describe('Seismic Transaction', async () => {
       to: deployedContractAddress,
       seismicInput: increment_input_encrypted.ciphertext,
       gas: 210000n,
+      gasPrice: parseGwei('20'),
       nonce: 2,
     })
 

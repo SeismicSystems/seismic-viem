@@ -139,6 +139,7 @@
     }
   },
   "dependencies": {
+    "@47ng/cloak": "^1.2.0",
     "@adraffy/ens-normalize": "1.11.0",
     "@noble/curves": "1.6.0",
     "@noble/hashes": "1.5.0",
@@ -146,6 +147,7 @@
     "@scure/bip39": "1.4.0",
     "abitype": "1.0.6",
     "isows": "1.0.6",
+    "terminate": "^2.8.0",
     "webauthn-p256": "0.0.10",
     "ws": "8.18.0"
   },

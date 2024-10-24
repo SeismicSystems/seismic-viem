@@ -236,6 +236,15 @@ export type TransactionRequestLegacy<
 > = TransactionRequestBase<quantity, index, type> &
   ExactPartial<FeeValuesLegacy<quantity>>
 
+export type TransactionRequestSeismic<
+  quantity = bigint,
+  index = number,
+  type = 'seismic',
+> = TransactionRequestBase<quantity, index, type> &
+  ExactPartial<FeeValuesLegacy<quantity>> & {
+    seismicInput: Hex
+  }
+
 export type TransactionRequestEIP2930<
   quantity = bigint,
   index = number,
@@ -284,6 +293,7 @@ export type TransactionRequest<quantity = bigint, index = number> = OneOf<
   | TransactionRequestEIP1559<quantity, index>
   | TransactionRequestEIP4844<quantity, index>
   | TransactionRequestEIP7702<quantity, index>
+  | TransactionRequestSeismic<quantity, index>
 >
 
 export type TransactionRequestGeneric<

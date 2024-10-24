@@ -1828,6 +1828,12 @@ export type WalletRpcSchema = [
     Parameters: WatchAssetParams
     ReturnType: boolean
   },
+  // Seismic namespace transaction
+  {
+    Method: 'seismic_sendTransaction'
+    Parameters: [transaction: TransactionRequest]
+    ReturnType: Hash
+  },
 ]
 
 ///////////////////////////////////////////////////////////////////////////

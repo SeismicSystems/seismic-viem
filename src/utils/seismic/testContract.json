@@ -1,0 +1,117 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "getNumber",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "increment",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "number",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "setNumber",
+      "inputs": [
+        { "name": "newNumber", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    }
+  ],
+  "bytecode": {
+    "object": "0x6080604052348015600f57600080fd5b5061010c8061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060465760003560e01c80633fb5c1cb14604b5780638381f58a14605d578063d09de08a146077578063f2c9ecd814607d575b600080fd5b605b60563660046098565b600055565b005b606560005481565b60405190815260200160405180910390f35b605b6084565b6000546065565b60008054908060918360b0565b9190505550565b60006020828403121560a957600080fd5b5035919050565b60006001820160cf57634e487b7160e01b600052601160045260246000fd5b506001019056fea264697066735822122031f4ba31b88803e6c32f3c311cd7ba7ce05fcd03aa6408db00b5952c092ce21f64736f6c63430008190033",
+    "sourceMap": "65:279:25:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x6080604052348015600f57600080fd5b506004361060465760003560e01c80633fb5c1cb14604b5780638381f58a14605d578063d09de08a146077578063f2c9ecd814607d575b600080fd5b605b60563660046098565b600055565b005b606560005481565b60405190815260200160405180910390f35b605b6084565b6000546065565b60008054908060918360b0565b9190505550565b60006020828403121560a957600080fd5b5035919050565b60006001820160cf57634e487b7160e01b600052601160045260246000fd5b506001019056fea264697066735822122031f4ba31b88803e6c32f3c311cd7ba7ce05fcd03aa6408db00b5952c092ce21f64736f6c63430008190033",
+    "sourceMap": "65:279:25:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;116:80;;;;;;:::i;:::-;171:6;:18;116:80;;;88:21;;;;;;;;;345:25:27;;;333:2;318:18;88:21:25;;;;;;;202:53;;;:::i;261:81::-;303:7;329:6;261:81;;202:53;240:6;:8;;;:6;:8;;;:::i;:::-;;;;;;202:53::o;14:180:27:-;73:6;126:2;114:9;105:7;101:23;97:32;94:52;;;142:1;139;132:12;94:52;-1:-1:-1;165:23:27;;14:180;-1:-1:-1;14:180:27:o;381:232::-;420:3;441:17;;;438:140;;500:10;495:3;491:20;488:1;481:31;535:4;532:1;525:15;563:4;560:1;553:15;438:140;-1:-1:-1;605:1:27;594:13;;381:232::o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "getNumber()": "f2c9ecd8",
+    "increment()": "d09de08a",
+    "number()": "8381f58a",
+    "setNumber(uint256)": "3fb5c1cb"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.25+commit.b61c2a91\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"increment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"number\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newNumber\",\"type\":\"uint256\"}],\"name\":\"setNumber\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/Counter.sol\":\"Counter\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/Counter.sol\":{\"keccak256\":\"0xb3b3f1007ad28a76f8bf8c06733ffbe50056be7977a07f9333bf46ff09638b71\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://0fa460dca737bc0d36428b38b064f664f814a803bffac95154d985508228339a\",\"dweb:/ipfs/QmQEVwQNTkn7qqDazVD7exj6wgG3poL2PaBJWrWxdBAeYw\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.25+commit.b61c2a91" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getNumber",
+          "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "increment"
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "number",
+          "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "newNumber",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "setNumber"
+        }
+      ],
+      "devdoc": { "kind": "dev", "methods": {}, "version": 1 },
+      "userdoc": { "kind": "user", "methods": {}, "version": 1 }
+    },
+    "settings": {
+      "remappings": ["forge-std/=lib/forge-std/src/"],
+      "optimizer": { "enabled": true, "runs": 200 },
+      "metadata": { "bytecodeHash": "ipfs" },
+      "compilationTarget": { "src/Counter.sol": "Counter" },
+      "evmVersion": "paris",
+      "libraries": {}
+    },
+    "sources": {
+      "src/Counter.sol": {
+        "keccak256": "0xb3b3f1007ad28a76f8bf8c06733ffbe50056be7977a07f9333bf46ff09638b71",
+        "urls": [
+          "bzz-raw://0fa460dca737bc0d36428b38b064f664f814a803bffac95154d985508228339a",
+          "dweb:/ipfs/QmQEVwQNTkn7qqDazVD7exj6wgG3poL2PaBJWrWxdBAeYw"
+        ],
+        "license": "UNLICENSED"
+      }
+    },
+    "version": 1
+  },
+  "id": 25
+}

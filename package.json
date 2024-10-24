@@ -39,6 +39,7 @@
     "test:env:node": "pnpm --filter test-node test",
     "test:env:tsc": "pnpm --filter test-tsc test",
     "test:env:vite": "pnpm --filter test-vite test",
+    "test:seismic": "bun test ./src/actions/wallet/sendSeismicTransaction.test.ts",
     "test:typecheck": "SKIP_GLOBAL_SETUP=true vitest --typecheck.only -c ./test/vitest.config.ts",
     "test:ui": "vitest dev -c ./test/vitest.config.ts --ui",
     "vectors": "bun test vectors/**/*.test.ts",

@@ -26,6 +26,7 @@ export const rpcTransactionType = {
   eip1559: '0x2',
   eip4844: '0x3',
   eip7702: '0x4',
+  seismic: '0x5',
 } as const
 
 export type FormatTransactionRequestErrorType = ErrorType
@@ -69,6 +70,8 @@ export function formatTransactionRequest(
     rpcRequest.type = rpcTransactionType[request.type]
   if (typeof request.value !== 'undefined')
     rpcRequest.value = numberToHex(request.value)
+  if (typeof request.seismicInput !== 'undefined')
+    rpcRequest.seismicInput = request.seismicInput
 
   return rpcRequest
 }
